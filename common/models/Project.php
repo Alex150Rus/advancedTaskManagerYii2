@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "project".
@@ -22,6 +24,19 @@ use Yii;
  */
 class Project extends \yii\db\ActiveRecord
 {
+    public function behaviors()
+    {
+        return [
+            //короткий способ описания поведения без настройки
+            ['class' => TimestampBehavior::class],
+            //позволяет заполнить поля creator_id и updater_id
+            ['class' => BlameableBehavior::class,
+                'createdByAttribute' => 'creator_id',
+                'updatedByAttribute' => 'updater_id',
+            ],
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
