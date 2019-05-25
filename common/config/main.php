@@ -10,4 +10,10 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
     ],
+    'modules' => [
+        // id нашего модуля из Gii
+        'chat' => [
+            'class' => 'common\modules\chat\Module',
+        ],
+    ],
 ];

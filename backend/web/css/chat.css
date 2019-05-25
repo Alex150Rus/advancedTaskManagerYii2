@@ -1,0 +1,31 @@
+.chatWrapper, .sendMessageFieldWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+}
+
+.chatWrapper {
+    width: 40%;
+}
+
+.chatTextArea {
+    height: 250px;
+}
+
+.chatSection {
+    display: flex;
+    justify-content: space-around;
+}
+
+.sendMessageFieldWrapper {
+    justify-content: center;
+}
+
+.labelSendTextField {
+    margin-top: 5px;
+    text-align: center;
+}
+
+.chatSendMessageBtn:hover {
+    font-weight: 600;
+}
