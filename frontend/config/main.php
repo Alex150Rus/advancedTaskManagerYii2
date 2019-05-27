@@ -1,4 +1,7 @@
 <?php
+
+use frontend\modules\api\Module;
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -14,6 +17,9 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -41,9 +47,17 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                // имяМодуля/имяКонтроллера
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'api/user'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'api/task'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'api/project'],
             ],
         ],
-
+    ],
+    'modules' => [
+        'api' => [
+            'class' => frontend\modules\api\Module::class,
+        ],
     ],
     'params' => $params,
 ];
