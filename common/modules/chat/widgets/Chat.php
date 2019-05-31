@@ -1,7 +1,7 @@
 <?php
 namespace common\modules\chat\widgets;
 
-use common\modules\chat\widgets\assets\ChatAsset;
+use common\modules\chat\widgets\ChatAsset;
 use Yii;
 
 class Chat extends \yii\bootstrap\Widget

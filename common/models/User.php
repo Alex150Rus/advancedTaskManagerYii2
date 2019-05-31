@@ -21,6 +21,18 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ *
+ * @property Task $activeTasks
+ * @property Task $createdTasks
+ * @property Task $updatedTasks
+ * @property Project $createdProjects
+ * @property Project $updatedProjects
+ *
+ * @const RELATION_TASKS_ACTIVE string activeTasks
+ * @const RELATION_TASKS_CREATED string createdTasks
+ * @const RELATION_TASKS_UPDATED string updatedTasks
+ * @const RELATION_PROJECTS_CREATED string createdProjects
+ * @const RELATION_PROJECTS_UPDATED string updatedProjects
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -28,6 +40,11 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
 
+    const RELATION_TASKS_ACTIVE = 'activeTasks';
+    const RELATION_TASKS_CREATED = 'createdTasks';
+    const RELATION_TASKS_UPDATED = 'updatedTasks';
+    const RELATION_PROJECTS_CREATED = 'createdProjects';
+    const RELATION_PROJECTS_UPDATED = 'updatedProjects';
 
     /**
      * {@inheritdoc}
@@ -71,7 +88,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return static::findOne(['verification_token' => $token, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -205,5 +222,45 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getActiveTasks()
+    {
+        return $this->hasOne(Task::class, ['executor_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedTasks()
+    {
+        return $this->hasOne(Task::class, ['creator_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedTasks()
+    {
+        return $this->hasOne(Task::class, ['updater_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreatedProjects()
+    {
+        return $this->hasOne(Project::class, ['creator_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUpdatedProjects()
+    {
+        return $this->hasOne(Project::class, ['updater_id' => 'id']);
     }
 }

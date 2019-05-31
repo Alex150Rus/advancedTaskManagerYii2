@@ -2,9 +2,11 @@
 
 namespace frontend\controllers;
 
+use common\models\User;
 use Yii;
 use common\models\Task;
 use common\models\search\TaskSearch;
+use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -86,12 +88,16 @@ class TaskController extends Controller
     {
         $model = $this->findModel($id);
 
+        $query = new Query();
+        $users = $query->select('id')->from(User::tableName())->column();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'users' => $users,
         ]);
     }
 

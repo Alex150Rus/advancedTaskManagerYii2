@@ -1,0 +1,77 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+GET http://frontend.dev/api/users?fields=name
+Accept: application/json
+
+###
+
+GET http://frontend.dev/api/tasks?expand=project,executor
+Authorization: Basic MTIzNDU2Og==
+Accept: application/json
+
+###
+GET http://frontend.dev/api/tasks
+Authorization: Basic MTIzNDU2Og==
+Accept: application/json
+
+
+###
+
+GET http://frontend.dev/api/tasks?page=2
+Accept: application/json
+
+###
+#сортировка по убыванию
+GET http://frontend.dev/api/tasks?sort=-id
+Authorization: Basic MTIzNDU2Og==
+Accept: application/json
+
+###
+POST http://frontend.dev/api/tasks
+Content-Type:application/json
+Authorization: Basic MTIzNDU2Og==
+
+{
+  "title" : "POST",
+  "description" : "created using REST API POST"
+}
+
+###
+
+GET http://frontend.dev/api/tasks/4
+Content-Type:application/json
+###
+
+GET http://frontend.dev/api/project
+Accept: application/json
+
+###
+
+GET http://frontend.dev/api/project?expand=tasks
+Authorization: Basic MTIzNDU2Og==
+Accept: application/json
+
+###
+
+### если projects post работает, если s на конце нет, то не работает
+POST http://frontend.dev/api/projects
+Content-Type:application/json
+Authorization: Basic MTIzNDU2Og==
+
+{
+  "title" : "POST",
+  "description" : "created using REST API POST"
+}
+
+###
+
+GET http://frontend.dev/api/projects
+Accept: application/json
+Authorization: Basic MTIzNDU2Og==
+
+###
