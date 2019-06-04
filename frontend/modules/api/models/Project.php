@@ -4,6 +4,8 @@
 namespace frontend\modules\api\models;
 
 
+use yii\helpers\StringHelper;
+
 class Project extends \common\models\Project
 {
     public function getTasks()
@@ -16,7 +18,7 @@ class Project extends \common\models\Project
             'number' => 'id',
             'title' => 'title',
             'description_short' => function(){
-                return substr($this->description, 0, 50);
+                return StringHelper::truncate($this->description, 50);
             },
             'active' => 'active',
         ];

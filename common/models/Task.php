@@ -24,9 +24,12 @@ use yii\behaviors\TimestampBehavior;
  * @property User $creator
  * @property User $executor
  * @property User $updater
+ * @const RELATION_PROJECT string $project
  */
 class Task extends \yii\db\ActiveRecord
 {
+    const RELATION_PROJECT = 'project';
+
     public function behaviors()
     {
         return [
