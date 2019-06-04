@@ -1,6 +1,7 @@
 <?php
 namespace common\models;
 
+use mohorev\file\UploadImageBehavior;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -17,6 +18,7 @@ use yii\web\IdentityInterface;
  * @property string $verification_token
  * @property string $email
  * @property string $auth_key
+ * @property string $avatar
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
@@ -33,6 +35,12 @@ use yii\web\IdentityInterface;
  * @const RELATION_TASKS_UPDATED string updatedTasks
  * @const RELATION_PROJECTS_CREATED string createdProjects
  * @const RELATION_PROJECTS_UPDATED string updatedProjects
+ *
+ * @const SCENARIO_UPDATE string $update
+ * @const SCENARIO_INSERT string $insert
+ *
+ * @const AVATAR_PREVIEW string $preview
+ * * @const AVATAR_ICO string $ico
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -40,11 +48,29 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
 
+    const STATUSES = [
+        self::STATUS_DELETED,
+        self::STATUS_ACTIVE,
+        self::STATUS_INACTIVE,
+    ];
+
+    Const STATUS_LABELS = [
+        self::STATUS_DELETED => 'Удалён',
+        self::STATUS_ACTIVE => 'Активный',
+        self::STATUS_INACTIVE => 'Неактивный',
+    ];
+
     const RELATION_TASKS_ACTIVE = 'activeTasks';
     const RELATION_TASKS_CREATED = 'createdTasks';
     const RELATION_TASKS_UPDATED = 'updatedTasks';
     const RELATION_PROJECTS_CREATED = 'createdProjects';
     const RELATION_PROJECTS_UPDATED = 'updatedProjects';
+
+    const SCENARIO_UPDATE = 'update';
+    const SCENARIO_INSERT = 'insert';
+
+    const AVATAR_PREVIEW = 'preview';
+    const AVATAR_ICO = 'ico';
 
     /**
      * {@inheritdoc}
@@ -61,6 +87,23 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             TimestampBehavior::className(),
+            [
+                'class' => UploadImageBehavior::class,
+                //путь к загруженной картинке
+                'attribute' => 'avatar',
+                // загружать картинку можно только при сценарии update
+                'scenarios' => [self::SCENARIO_UPDATE],
+                //'placeholder' => '@app/modules/user/assets/images/userpic.jpg',
+                //путь загрузки картинки
+                'path' => '@frontend/web/upload/user/{id}',
+                //путь для html тега - абсолютный
+                'url' => Yii::$app->params['hosts.front'] .
+                Yii::getAlias('@web/upload/user/{id}'),
+                'thumbs' => [
+                    self::AVATAR_ICO => ['width' => 30, 'quality' => 90],
+                    self::AVATAR_PREVIEW => ['width' => 200, 'height' => 200],
+                ],
+            ],
         ];
     }
 
