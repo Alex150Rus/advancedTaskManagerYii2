@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use lhs\Yii2SaveRelationsBehavior\SaveRelationsBehavior;
 use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -22,10 +23,35 @@ use yii\behaviors\TimestampBehavior;
  * @property User $updater
  * @property ProjectUser[] $projectUsers
  * @const RELATION_TASKS string $tasks
+ * @const RELATION_PROJECT_USERS string $projectUsers
+ *
+ * @const STATUS_NOTACTIVE integer 0
+ * @const STATUS_ACTIVE integer 1
+ *
+ * @const STATUSES array
+ * @const STATUS_LABELS array
+ *
+ * @mixin TimestampBehavior
+ * @mixin BlameableBehavior
+ * @mixin SaveRelationsBehavior
  */
 class Project extends \yii\db\ActiveRecord
 {
     const RELATION_TASKS = 'tasks';
+    const RELATION_PROJECT_USERS = 'projectUsers';
+
+    const STATUS_NOTACTIVE = 0;
+    const STATUS_ACTIVE = 1;
+
+    const STATUSES = [
+        self::STATUS_NOTACTIVE,
+        self::STATUS_ACTIVE,
+    ];
+
+    const STATUS_LABELS = [
+        self::STATUS_NOTACTIVE => 'неактивен',
+        self::STATUS_ACTIVE => 'активен',
+    ];
 
     public function behaviors()
     {
@@ -37,6 +63,12 @@ class Project extends \yii\db\ActiveRecord
                 'createdByAttribute' => 'creator_id',
                 'updatedByAttribute' => 'updater_id',
             ],
+            'saveRelations' => [
+                'class' => SaveRelationsBehavior::class,
+                'relations' => [
+                  self::RELATION_PROJECT_USERS,
+                ],
+            ]
         ];
     }
 

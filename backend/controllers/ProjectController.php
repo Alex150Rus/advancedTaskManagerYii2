@@ -86,7 +86,7 @@ class ProjectController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($this->loadModel($model) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -107,6 +107,21 @@ class ProjectController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    private function loadModel (Project $model) {
+        // используем метод пост для получения post данных. Получим массив Project[c ключами]
+        // Project[projectUsers][цифра - номер строки][project_id или role] - атрибут name тэга select формы
+        $data = Yii::$app->request->post($model->formName());
+        //из массива получаем данные по нужному ключу
+        $projectUsers = $data[Project::RELATION_PROJECT_USERS] ?? null;
+
+        if ($projectUsers !== null) {
+            // записать данные сможем так как установлен behavior saveRelations иначе только get
+            $model->projectUsers = $projectUsers === '' ? [] : $projectUsers;
+        }
+
+        return $model->load(Yii::$app->request->post());
     }
 
     /**
