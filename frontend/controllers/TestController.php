@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\User;
 use yii\web\Controller;
 
 /**
@@ -10,6 +11,9 @@ class TestController extends Controller{
 
     public function actionIndex()
     {
-        return 'test';
+        $model = User::findOne(1);
+	    $model->password_reset_token = 1235;
+	    $model->save();
+	    return 'test';
     }
 }
