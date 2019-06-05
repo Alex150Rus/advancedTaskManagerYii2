@@ -1,11 +1,13 @@
 <?php
 
+use common\models\Project;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\search\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $dataProvider common\models\Project*/
 
 $this->title = 'Users';
 $this->params['breadcrumbs'][] = $this->title;

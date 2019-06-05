@@ -30,7 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'title',
             'description:ntext',
-            'active',
+            [
+              'attribute' => 'active',
+              'filter' => \common\models\Project::STATUS_LABELS,
+              'value' => function ($dataProvider) {
+                return \yii\helpers\ArrayHelper::getValue(\common\models\Project::STATUS_LABELS, $dataProvider->active);
+              },
+            ],
             'creator_id',
             //'updater_id',
             //'created_at',

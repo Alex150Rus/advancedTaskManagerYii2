@@ -1,10 +1,12 @@
 <?php
 
+use common\models\Project;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Project */
+/* @var $dataProvider common\models\Project*/
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Projects', 'url' => ['index']];
@@ -32,12 +34,38 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'title',
             'description:ntext',
-            'active',
+            [
+              'attribute' => 'active',
+               'value' => function ($dataProvider) {
+                   return \yii\helpers\ArrayHelper::getValue(\common\models\Project::STATUS_LABELS, $dataProvider->active);
+               },
+            ],
             'creator_id',
             'updater_id',
-            'created_at',
-            'updated_at',
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
     ]) ?>
+
+    <?= \yii\grid\GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            [
+              'attribute' => 'user_id',
+              'label' => 'username',
+              'format' => 'raw',
+              'value' => function ($dataProvider) {
+                return Html::a(\common\models\User::findOne(
+                  $dataProvider->user_id)->username, ['user/view', 'id' => $dataProvider->user_id]
+                );
+              }
+            ],
+            [
+              'attribute' => 'role'
+            ],
+        ],
+    ])?>
 
 </div>

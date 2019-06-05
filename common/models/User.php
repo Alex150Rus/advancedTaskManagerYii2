@@ -35,12 +35,13 @@ use yii\web\IdentityInterface;
  * @const RELATION_TASKS_UPDATED string updatedTasks
  * @const RELATION_PROJECTS_CREATED string createdProjects
  * @const RELATION_PROJECTS_UPDATED string updatedProjects
+ * @const RELATION_IN_PROJECTS string inProjects
  *
  * @const SCENARIO_UPDATE string $update
  * @const SCENARIO_INSERT string $insert
  *
  * @const AVATAR_PREVIEW string $preview
- * * @const AVATAR_ICO string $ico
+ * @const AVATAR_ICO string $ico
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -65,6 +66,7 @@ class User extends ActiveRecord implements IdentityInterface
     const RELATION_TASKS_UPDATED = 'updatedTasks';
     const RELATION_PROJECTS_CREATED = 'createdProjects';
     const RELATION_PROJECTS_UPDATED = 'updatedProjects';
+    const RELATION_IN_PROJECTS = 'inProjects';
 
     const SCENARIO_UPDATE = 'update';
     const SCENARIO_INSERT = 'insert';
@@ -305,5 +307,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function getUpdatedProjects()
     {
         return $this->hasOne(Project::class, ['updater_id' => 'id']);
+    }
+
+    public function getInProjects()
+    {
+        return $this->hasMany(ProjectUser::class, ['user_id' => 'id']);
     }
 }

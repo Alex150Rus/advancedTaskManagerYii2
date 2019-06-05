@@ -48,4 +48,26 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+    <?= \yii\grid\GridView::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            [
+                'attribute' => 'title',
+                'label' => 'Project title',
+                'format' => 'raw',
+                'value' => function ($dataProvider) {
+                    return Html::a(
+                      \common\models\Project::findOne(
+                        $dataProvider->project_id)->title, ['project/view', 'id' => $dataProvider->project_id]
+                    );
+                }
+            ],
+            [
+                'attribute' => 'role',
+            ],
+        ],
+    ])?>
+
 </div>

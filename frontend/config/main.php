@@ -28,7 +28,6 @@ return [
             //назначение наблюдателя - анонимную функцию на определённое событие.
             'on ' . \yii\web\User::EVENT_AFTER_LOGIN => function() {
                 Yii::info('success', 'auth');
-                return;
             }
         ],
         'session' => [

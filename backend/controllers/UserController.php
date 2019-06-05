@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\User;
 use backend\models\search\UserSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -52,8 +53,13 @@ class UserController extends Controller
      */
     public function actionView($id)
     {
+        $user = $this ->findModel($id);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $user->getInProjects(),
+        ]);
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $user,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
