@@ -36,9 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'description:ntext',
             [
               'attribute' => 'active',
-               'value' => function ($dataProvider) {
-                   return \yii\helpers\ArrayHelper::getValue(\common\models\Project::STATUS_LABELS, $dataProvider->active);
-               },
+               'value' => \common\models\Project::STATUS_LABELS[$model->active],
             ],
             'creator_id',
             'updater_id',
@@ -55,12 +53,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
               'attribute' => 'user_id',
               'label' => 'username',
-              'format' => 'raw',
-              'value' => function ($dataProvider) {
-                return Html::a(\common\models\User::findOne(
-                  $dataProvider->user_id)->username, ['user/view', 'id' => $dataProvider->user_id]
-                );
-              }
+              'value' => function($dataProvider){
+                return $dataProvider->user->username;
+              },
             ],
             [
               'attribute' => 'role'
