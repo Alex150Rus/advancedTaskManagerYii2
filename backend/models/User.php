@@ -2,9 +2,45 @@
 
 namespace backend\models;
 
+use common\models\Project;
+use common\models\Task;
+
 /**
- * @property string $password
+ * User model
+ *
+ * @property integer $id
+ * @property string $username
+ * @property string $password_hash
+ * @property string $password_reset_token
+ * @property string $verification_token
+ * @property string $email
+ * @property string $auth_key
+ * @property string $avatar
+ * @property integer $status
+ * @property integer $created_at
+ * @property integer $updated_at
+ * @property string $password write-only password
+ *
+ * @property Task $activeTasks
+ * @property Task $createdTasks
+ * @property Task $updatedTasks
+ * @property Project $createdProjects
+ * @property Project $updatedProjects
+ *
+ * @const RELATION_TASKS_ACTIVE string activeTasks
+ * @const RELATION_TASKS_CREATED string createdTasks
+ * @const RELATION_TASKS_UPDATED string updatedTasks
+ * @const RELATION_PROJECTS_CREATED string createdProjects
+ * @const RELATION_PROJECTS_UPDATED string updatedProjects
+ * @const RELATION_IN_PROJECTS string inProjects
+ *
+ * @const SCENARIO_UPDATE string $update
+ * @const SCENARIO_INSERT string $insert
+ *
+ * @const AVATAR_PREVIEW string $preview
+ * @const AVATAR_ICO string $ico
 */
+
 class User extends \common\models\User
 {
     private $password;

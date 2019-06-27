@@ -56,7 +56,7 @@ class ProjectController extends Controller
     {
         $project = $this ->findModel($id);
         $dataProvider = new ActiveDataProvider([
-            'query' => $project->getProjectUsers(),
+            'query' => $project->getProjectUsers()
         ]);
         return $this->render('view', [
             'model' => $project,
