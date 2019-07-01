@@ -11,6 +11,7 @@ use Yii;
  * @property int $project_id
  * @property int $user_id
  * @property string $role
+ * @const RELATION_USER string $user
  *
  * @property Project $project
  * @property User $user
@@ -20,6 +21,7 @@ class ProjectUser extends \yii\db\ActiveRecord
     const ROLE_DEVELOPER = 'developer';
     const ROLE_MANAGER = 'manager';
     const ROLE_TESTER = 'tester';
+    const RELATION_USER = 'user';
 
     const ROLE_LABELS = [
         self::ROLE_DEVELOPER => 'Developer',

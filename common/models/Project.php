@@ -149,4 +149,17 @@ class Project extends \yii\db\ActiveRecord
     {
         return new \common\models\query\ProjectQuery(get_called_class());
     }
+
+    /**
+     * {@inheritdoc}
+     * Будем получать id пользователя и роль в проекте. Ограничение - у одного пользователя только одна роль
+     * @return array user_id->role.
+     */
+
+    public function getUsersRoles() {
+
+        return $this->getProjectUsers()->select('role')->indexBy('user_id')->column();
+    }
+
+
 }

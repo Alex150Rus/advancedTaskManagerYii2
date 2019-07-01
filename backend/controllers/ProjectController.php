@@ -2,12 +2,15 @@
 
 namespace backend\controllers;
 
+use common\models\User;
 use Yii;
 use common\models\Project;
 use common\models\search\ProjectSearch;
 use yii\data\ActiveDataProvider;
 use yii\db\Query;
+use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -22,6 +25,16 @@ class ProjectController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+
+                    [
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -37,6 +50,11 @@ class ProjectController extends Controller
      */
     public function actionIndex()
     {
+// проверяем работу роли - это более тонкая настройка доступа экшонов пользователю
+//        if (Yii::$app->user->can('admin')){
+//            exit('admin');
+//        }
+
         $searchModel = new ProjectSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -56,7 +74,7 @@ class ProjectController extends Controller
     {
         $project = $this ->findModel($id);
         $dataProvider = new ActiveDataProvider([
-            'query' => $project->getProjectUsers(),
+            'query' => $project->getProjectUsers()
         ]);
         return $this->render('view', [
             'model' => $project,
@@ -71,6 +89,10 @@ class ProjectController extends Controller
      */
     public function actionCreate()
     {
+        if (!Yii::$app->user->can('createProject')) {
+            throw new ForbiddenHttpException();
+        }
+
         $model = new Project();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -93,7 +115,21 @@ class ProjectController extends Controller
     {
         $model = $this->findModel($id);
 
+        //получим старые роли до изменения данных
+        $roles = $model->getUsersRoles();
+
         if ($this->loadModel($model) && $model->save()) {
+
+            //после сохранения новых ролей сравним старый список с новым и запишем в переменную различие в ролях
+            if ($diffRoles = array_diff_assoc($model->getUsersRoles(), $roles)) {
+                foreach ($diffRoles as $userId => $diffRole) {
+                    // отправляем данные в метод assignRole, который выполнит некие действия:
+                    // нотификация пользователя по почте при смене роли
+                    Yii::$app->projectService->assignRole($model, User::findOne($userId), $diffRole);
+                }
+            }
+
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
